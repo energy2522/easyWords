@@ -11,6 +11,7 @@ import com.maiboroda.easyWords.domain.Word;
 import com.maiboroda.easyWords.dto.CollectionDTO;
 import com.maiboroda.easyWords.dto.ProgressDTO;
 import com.maiboroda.easyWords.dto.WordDTO;
+import com.maiboroda.easyWords.exception.WordNotFoundException;
 import com.maiboroda.easyWords.repository.UnitRepository;
 import com.maiboroda.easyWords.repository.WordRepository;
 
@@ -86,9 +87,12 @@ public class WordService {
     }
 
     public ProgressDTO updateProgress(int id, ProgressDTO progressDTO) {
-        Word word = wordRepository.findById(id).orElseThrow(() -> );
+        Word word = wordRepository.findById(id).orElseThrow(() -> new WordNotFoundException(id));
 
-        wordRepository.updateProgress(id, )
-        return null;
+        double rating = (word.getRating() + progressDTO.getRating()) / 2;
+
+        wordRepository.updateProgress(id, rating);
+
+        return conversionService.convert(wordRepository.findById(id).get(), ProgressDTO.class);
     }
 }
