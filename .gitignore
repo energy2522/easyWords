@@ -1,2 +1,7 @@
 /.idea/
 /easyWords.iml
+/datadir/
+/target/
+/easyWords.mv.db
+/easyWords.mv.db.trace.db
+/easyWords.trace.db
