@@ -15,7 +15,7 @@ import com.maiboroda.easyWords.dto.WordDTO;
 import com.maiboroda.easyWords.service.WordService;
 
 @RestController
-public class WordController {
+public class WordsController {
     private WordService wordService;
 
     @GetMapping("/words/{id}")

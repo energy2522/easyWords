@@ -9,7 +9,7 @@ import com.maiboroda.easyWords.domain.Word;
 public interface WordRepository extends CrudRepository<Word, Integer> {
 
     @Modifying
-    @Query("update word w set w.language = :language, w.word = :world where w.id = :id")
+    @Query("update word w set w.language = :language, w.word = :word where w.id = :id")
     int update(int id, String word, String language);
 
     @Modifying

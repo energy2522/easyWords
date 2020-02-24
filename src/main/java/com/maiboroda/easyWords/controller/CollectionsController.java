@@ -1,6 +1,7 @@
 package com.maiboroda.easyWords.controller;
 
 import java.util.List;
+import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,11 +20,11 @@ import com.maiboroda.easyWords.service.CollectionService;
 import com.maiboroda.easyWords.service.WordService;
 
 @RestController
-public class CollectionController {
+public class CollectionsController {
     private CollectionService collectionService;
     private WordService wordService;
 
-    public CollectionController(CollectionService collectionService, WordService wordService) {
+    public CollectionsController(CollectionService collectionService, WordService wordService) {
         this.collectionService = collectionService;
         this.wordService = wordService;
     }
@@ -44,7 +45,7 @@ public class CollectionController {
 
     @PostMapping("/collections")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public @ResponseBody CollectionDTO addCollection(@RequestBody CollectionDTO collection) {
+    public @ResponseBody CollectionDTO addCollection(@Valid @RequestBody CollectionDTO collection) {
         CollectionDTO savedCollection = collectionService.add(collection);
 
         return savedCollection;
@@ -52,7 +53,7 @@ public class CollectionController {
 
     @PutMapping("/collections/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public @ResponseBody CollectionDTO updateCollection(@PathVariable("id") int id, @RequestBody CollectionDTO collection) {
+    public @ResponseBody CollectionDTO updateCollection(@PathVariable("id") int id, @Valid @RequestBody CollectionDTO collection) {
         CollectionDTO updatedCollection = collectionService.update(id, collection);
 
         return updatedCollection;
@@ -78,7 +79,7 @@ public class CollectionController {
 
     @PostMapping("/collections/{id}/words")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public @ResponseBody WordDTO addWord(@PathVariable("id") int id, @RequestBody WordDTO wordDTO) {
+    public @ResponseBody WordDTO addWord(@PathVariable("id") int id, @Valid @RequestBody WordDTO wordDTO) {
         CollectionDTO collectionDTO = collectionService.getById(id);
         WordDTO savedWord = wordService.addWord(collectionDTO, wordDTO);
 

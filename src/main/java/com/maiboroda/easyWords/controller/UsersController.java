@@ -1,10 +1,12 @@
 package com.maiboroda.easyWords.controller;
 
 import java.util.List;
-import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,49 +21,43 @@ import com.maiboroda.easyWords.dto.UserDTO;
 import com.maiboroda.easyWords.service.UserService;
 
 @RestController
-public class UserController {
+@Validated
+public class UsersController {
 
     private UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/users")
     public @ResponseBody List<UserDTO> getUsers() {
-        List<UserDTO> users = userService.getAll();
-
-        return users;
+        return userService.getAll();
     }
 
-    @GetMapping("/users/{id}")
-    public @ResponseBody UserDTO getUser(@PathVariable("id") int id) {
-        UserDTO user = userService.getById(id);
-
-        return user;
+    @GetMapping("/users/{userId}")
+    public @ResponseBody UserDTO getUser(@PathVariable("userId") @Min(value = 1, message = "userId {validation.Min.message}") int id) {
+        return userService.getById(id);
     }
 
     @PostMapping("/users")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public UserDTO addUser(@RequestBody UserDTO userDTO) {
-        UserDTO savedUser = userService.add(userDTO);
-
-        return savedUser;
+    public UserDTO addUser(@Valid @RequestBody UserDTO userDTO) {
+        return userService.add(userDTO);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/users/{userId}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable("id") @NotNull Integer id) {
+    public void deleteUser(@PathVariable("userId") @Min(value = 1, message = "userId {validation.Min.message}") int id) {
         userService.delete(id);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/users/{userId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public UserDTO updateUser(@PathVariable("id") @NotNull Integer id, @RequestBody UserDTO userDTO) {
-        UserDTO updatedUser = userService.update(id, userDTO);
-
-        return updatedUser;
+    public UserDTO updateUser(@PathVariable("userId") @Min(value = 1, message = "userId {validation.Min.message}") int id,
+            @Validated @RequestBody UserDTO userDTO) {
+        return userService.update(id, userDTO);
     }
 
 }
